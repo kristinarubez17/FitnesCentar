@@ -1,0 +1,293 @@
+﻿
+@{
+    ViewBag.Title = "Pocetna vlasnik";
+}
+@model dynamic
+@{
+
+    var trainers = ViewBag.trainers;
+    var centers = ViewBag.centers;
+    var ratings = ViewBag.ratings;
+}
+
+<h2>Pocetna</h2>
+
+<div class="container-fluid">
+    <div class="function-nav">
+        <a class="btn btn-primary" role="button" onclick="setActive('users')">Treneri</a>
+        <a class="btn btn-default" role="button" onclick="setActive('centers')">Fitnes centri</a>
+        <a class="btn btn-default" role="button" onclick="setActive('reviews')">Ocene</a>
+    </div>
+    <div id="users" class="function active">
+        <h3>Dodavanje trenera</h3>
+        <form action="User/Trainer" method="post">
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Korisnicko ime</label>
+                <div class="col-sm-12">
+                    <input type="text" class="form-control" id="inputEmail3" placeholder="Korisnicko ime" name="username">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+                <div class="col-sm-12">
+                    <input type="password" class="form-control" id="inputPassword3" placeholder="Lozinka" name="password">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Email</label>
+
+                <div class="col-sm-12">
+                    <input type="text" class="form-control" id="inputPassword3" placeholder="Email" name="email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Ime</label>
+
+                <div class="col-sm-12">
+                    <input type="text" class="form-control" id="inputPassword3" placeholder="Ime" name="firstname">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Prezime</label>
+
+                <div class="col-sm-12">
+                    <input type="text" class="form-control" id="inputPassword3" placeholder="Prezime" name="lastname">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Pol</label>
+
+                <div class="col-sm-12">
+                    <select name="gender" class="form-control" id="inputPassword3">
+                        <option value="1">Muski</option>
+                        <option value="2">Zenski</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Datum rodjenja</label>
+                <div class="col-sm-12">
+                    <input class="form-control" type="date" name="birthday" />
+                </div>
+            </div>
+            <br />
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-default">Kreiraj korisnika</button>
+                </div>
+            </div>
+        </form><br />
+        <h3>Dodati treneri</h3>
+        <table class="table">
+            <thead>
+            <th>ID</th>
+            <th>Korisnicko ime</th>
+            <th>Email</th>
+            <th>Ime</th>
+            <th>Prezime</th>
+            <th>Pol</th>
+            <th>Rodjendan</th>
+            <th>Fitnes centar</th>
+            <th>Blokiraj</th>
+            <th>Izmeni</th>
+            <th>Ukloni</th>
+            </thead>
+            @foreach (var trainer in trainers)
+            {
+                <tr>
+                    <td>@trainer.id</td>
+                    <td>@trainer.username</td>
+                    <td>@trainer.email</td>
+                    <td>@trainer.firstname</td>
+                    <td>@trainer.lastname</td>
+                    <td>@trainer.gender</td>
+                    <td>@trainer.birthday</td>
+                    @if (trainer.center_id == 0)
+                    {
+                        <td>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="prepareAppoint(@trainer.id)">
+                                Dodeli
+                            </button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>@trainer.center_name</td>
+                    }
+                    @if (!trainer.isBlocked)
+                    {
+                        <td>@Html.ActionLink("Blokiraj", "Block", new { id = trainer.id }, new { @class = "btn btn-warning" })</td>
+                    }
+                    else
+                    {
+                        <td>@Html.ActionLink("Odblokiraj", "Unblock", new { id = trainer.id }, new { @class = "btn btn-warning" })</td>
+                    }
+                    <td>@Html.ActionLink("Izmeni", "Edit", new { id = trainer.id }, new { @class = "btn btn-default" })</td>
+                    <td>@Html.ActionLink("Ukloni", "RemoveTrainer", new { id = trainer.id }, new { @class = "btn btn-danger" })</td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div id="centers" class="function">
+        <h3>Dodavanje fitnes centra</h3>
+        <form action="FitnesCenter/Create" method="POST">
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Naziv</label>
+                <div class="col-sm-12">
+                    <input type="text" class="form-control" id="inputEmail3" placeholder="Naziv" name="name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Address</label>
+                <div class="col-sm-12">
+                    <input type="text" class="form-control" id="inputEmail3" placeholder="Adresa" name="address">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Godina otvaranja</label>
+                <div class="col-sm-12">
+                    <input type="number" class="form-control" id="inputEmail3" placeholder="2019" name="year_opened">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Cena na mesec</label>
+                <div class="col-sm-12">
+                    <input type="number" class="form-control" id="inputEmail3" placeholder="2000" name="month_price">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Cena po godini</label>
+                <div class="col-sm-12">
+                    <input type="number" class="form-control" id="inputEmail3" placeholder="20000" name="year_price">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Cena grupnog treninga</label>
+                <div class="col-sm-12">
+                    <input type="number" class="form-control" id="inputEmail3" placeholder="3000" name="group_price">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Cena grupnog treninga s trenerom</label>
+                <div class="col-sm-12">
+                    <input type="number" class="form-control" id="inputEmail3" placeholder="5000" name="group_price_with_trainer">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-default">Kreiraj korisnika</button>
+                </div>
+            </div>
+        </form>
+        <h3>Dodati centri</h3>
+        <table class="table">
+            <thead>
+            <th>ID</th>
+            <th>Naziv</th>
+            <th>Adresa</th>
+            <th>Godina otvaranja</th>
+            <th>Mesecna cena</th>
+            <th>Godisnja cena</th>
+            <th>Cena grupnog treninga</th>
+            <th>Cena treninga s trenerom</th>
+            <th>Treninzi</th>
+            <th>Izmeni</th>
+            <th>Ukloni</th>
+            </thead>
+            @foreach (var trainer in centers)
+            {
+                <tr>
+                    <td>@trainer.id</td>
+                    <td>@trainer.name</td>
+                    <td>@trainer.address</td>
+                    <td>@trainer.year_opened</td>
+                    <td>@trainer.month_price</td>
+                    <td>@trainer.year_price</td>
+                    <td>@trainer.group_price</td>
+                    <td>@trainer.group_price_with_trainer</td>
+                    <td>@Html.ActionLink("Treninzi", "Trainings", new { id = trainer.id }, new { @class = "btn btn-default" })</td>
+                    <td>@Html.ActionLink("Izmeni", "Edit", new { id = trainer.id }, new { @class = "btn btn-warning" })</td>
+                    <td>@Html.ActionLink("Ukloni", "Delete", new { id = trainer.id }, new { @class = "btn btn-danger" })</td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div id="reviews" class="function">
+        <h3>Ocene</h3>
+        @foreach (var r in ratings)
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@r.training_name - @r.center_name</h3>
+                </div>
+                <div class="panel-body">
+                    <p>Ocena: @r.review / 5</p>
+                    <p>Komentar: @r.comment</p>
+                </div>
+                @if (Session["uid"] != null)
+                {
+                <div class="panel-footer" style="display:flex;width:100%; justify-content:flex-end;">
+                    <form action="Review/Delete/@r.id" method="POST">
+                        <button type="submit" class="btn btn-danger">Ukloni</button>
+                    </form>
+                    <p style="margin: 0 1rem;"></p>
+                    @if (r.display == 0)
+                    {
+                        <a href="Review/Accept/@r.id" class=" btn btn-success">Odobri</a>
+                    }
+                    else
+                    {
+                        <a href="Review/Reject/@r.id" class=" btn btn-danger">Odbij</a>
+
+                    }
+                </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Dodela fitnes centra</h4>
+            </div>
+            <div class="modal-body">
+                <form action="User/GiveCenter" method="POST" id="appointForm">
+                    <label for="inputPassword3" class="col-sm-2 control-label">Odaberi centar</label>
+                    <div class="col-sm-12">
+                        <select type="number" class="form-control" id="inputEmail3" name="center_id">
+                            @foreach (var center in centers)
+                            {
+                                <option value="@center.id">@center.name</option>
+                            }
+                        </select>
+                    </div>
+                    <input type="hidden" id="modal_user_id" name="user_id" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="appoint()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function setActive(id) {
+        $(".function").removeClass("active")
+        $("#" + id + ".function").addClass("active")
+        $(event.target).removeClass("btn-default")
+        $(".btn").removeClass("btn-primary")
+        $(".btn").addClass("btn-default")
+        $(event.target).addClass(".btn-primary")
+    }
+    function prepareAppoint(user_id) {
+        $("#modal_user_id").val(user_id)
+    }
+    function appoint() {
+        $('#appointForm').submit()
+        console.log("here")
+    }
+</script>

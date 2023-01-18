@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "Prijavljeni na trening";
+}
+@{
+    var users = ViewBag.users;
+}
+@using FitCen.Models;
+@model User
+<h2>Prijavleni na trening</h2>
+<table class="table table-striped">
+    <thead>
+    <th>Korisnicko ime</th>
+    <th>Email</th>
+    <th>Ime</th>
+    <th>Prezime</th>
+    <th>Pol</th>
+    <th>Datum rodjenja</th>
+    </thead>
+    <tbody>
+        @foreach (var u in users)
+        {
+            <tr>
+                <td>@u.username</td>
+                <td>@u.email</td>
+                <td>@u.firstname</td>
+                <td>@u.lastname</td>
+                @if (u.gender == 1)
+                {
+                    <td>Muski</td>
+                }
+                else
+                {
+                    <td>Zenski</td>
+                }
+                <td>@u.birthday</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

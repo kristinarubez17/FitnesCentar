@@ -1,0 +1,26 @@
+﻿@using FitCen.Models
+@model dynamic
+    @{
+        ViewBag.Title = "GetCenterReviews";
+        var reviews = ViewBag.reviews;
+    }
+
+    <h2>Ocene korisnika</h2>
+    @foreach (var r in reviews)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">@r.training_name - @r.center_name</h3>
+            </div>
+            <div class="panel-body">
+                <p>Ocena: @r.review / 5</p>
+                <p>Komentar: @r.comment</p>
+                <p>
+                    Status: @if (r.display == 0)
+                    {<span>Neobobren</span> }
+                    else
+                    { <span>Odobren</span>}
+                </p>
+            </div>
+        </div>
+    }

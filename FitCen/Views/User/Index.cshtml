@@ -1,0 +1,225 @@
+﻿@using FitCen.Models
+@model dynamic
+@{
+    ViewBag.Title = "Index";
+    var upcoming_trainings = ViewBag.upcoming_trainings;
+    var past_trainings = ViewBag.past_trainings;
+    var ratings = ViewBag.ratings;
+    var sorting_order = ViewBag.sorting_order;
+    var sorting = ViewBag.Sorting;
+    var search = ViewBag.search;
+    var time_upper = ViewBag.time_upper;
+    var time_lower = ViewBag.time_lower;
+}
+
+<h2>Pocetna</h2>
+
+<div class=" container-fluid">
+    <div class="function-nav">
+        <a class="btn btn-primary" role="button" onclick="setActive('upcoming')">Dolazeci treninzi</a>
+        <a class="btn btn-default" role="button" onclick="setActive('past')">Prosli treninzi</a>
+        <a class="btn btn-default" role="button" onclick="setActive('reviews')">Ocene</a>
+    </div>
+    <div id="upcoming" class="function active">
+        <h3>Dolazeci treninzi</h3>
+        <table class="table">
+            <thead>
+            <th>ID</th>
+            <th>Naziv</th>
+            <th>Tip treninga</th>
+            <th>Trajanje</th>
+            <th>Pocetak</th>
+            <th>Maksimalno posetilaca</th>
+            <th>Slobodna mesta</th>
+            <th>Ukloni</th>
+            </thead>
+            <tbody>
+                @foreach (var trainer in upcoming_trainings)
+                {
+                    <tr>
+                        <td>@trainer.id</td>
+                        <td>@trainer.name</td>
+                        <td>@trainer.training_type</td>
+                        <td>@trainer.duration</td>
+                        <td>@trainer.start</td>
+                        <td>@trainer.max_people</td>
+                        <td>@trainer.free_places</td>
+                        <td>@Html.ActionLink("Ukloni", "Delete", new { id = trainer.id }, new { @class = "btn btn-danger" })</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+    <div id="past" class="function ">
+        <h3>Protekli treninzi</h3>
+        <form action="/User/Search" method="GET">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="text" name="search" class="form-control" placeholder="Naziv treninga,naziv centra, tip trening" aria-label="Pretraga" aria-describedby="basic-addon2" value="@search">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @if (time_upper != DateTime.MaxValue)
+                        {
+                            <input type="datetime-local" name="time_upper" class="form-control" placeholder="Gornja vremenska granica" aria-label="Pretraga" aria-describedby="basic-addon2" value="@time_upper.ToString("yyyy-MM-dd HH:mm:ss")">
+                        }
+                        else
+                        {
+                            <input type="datetime-local" name="time_upper" class="form-control" placeholder="Gornja vremenska granica" aria-label="Pretraga" aria-describedby="basic-addon2">
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        @if (time_lower != DateTime.MinValue)
+                        {
+                            <input type="datetime-local" name="time_lower" class="form-control" placeholder="Donja vremenska granica" aria-label="Pretraga" aria-describedby="basic-addon2" value="@time_lower.ToString("yyyy-MM-dd HH:mm:ss")">
+                        }
+                        else
+                        {
+                            <input type="datetime-local" name="time_lower" class="form-control" placeholder="Donja vremenska granica" aria-label="Pretraga" aria-describedby="basic-addon2">
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 1rem;">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <select name="sorting" class="form-control">
+                            <option value="Sortiranje" disabled>Sortiranje</option>
+                            @if (sorting == "name")
+                            {
+                                <option value="name" selected>Naziv</option>
+                            }
+                            else
+                            {
+                                <option value="name">Naziv</option>
+                            }
+                            @if (sorting == "type")
+                            {
+                                <option value="type" selected>Tip</option>
+                            }
+                            else
+                            {
+                                <option value="type">Tip</option>
+                            }
+                            @if (sorting == "time")
+                            {
+                                <option value="time" selected>Vreme</option>
+                            }
+                            else
+                            {
+                                <option value="time">Vreme</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <select name="sorting_order" class="form-control">
+                        <option value="Poredak" disabled>Poredak</option>
+                        @if (sorting_order == "ascending")
+                        {
+                            <option value="ascending" selected>Rastuce</option>
+                        }
+                        else
+                        {
+                            <option value="ascending">Rastuce</option>
+                        }
+                        @if (sorting_order == "descending")
+                        {
+                            <option value="descending" selected>Opadajuce</option>
+                        }
+                        else
+                        {
+                            <option value="descending">Opadajuce</option>
+                        }
+                    </select>
+                </div>
+            </div>
+           
+            <div class="" style="margin-top:1rem;">
+                <button class="btn btn-outline-secondary" type="submit">Pretraži</button>
+            </div>
+        </form>
+
+
+
+        <table class="table">
+            <thead>
+            <th>ID</th>
+            <th>Naziv</th>
+            <th>Tip treninga</th>
+            <th>Trajanje</th>
+            <th>Pocetak</th>
+            <th>Maksimalno posetilaca</th>
+            <th>Slobodna mesta</th>
+            <th>Posetioci</th>
+            </thead>
+            <tbody>
+                @foreach (var trainer in past_trainings)
+                {
+                    <tr>
+                        <td>@trainer.id</td>
+                        <td>@trainer.name</td>
+                        <td>@trainer.training_type</td>
+                        <td>@trainer.duration</td>
+                        <td>@trainer.start</td>
+                        <td>@trainer.max_people</td>
+                        <td>@trainer.free_places</td>
+                        <td>@Html.ActionLink("Oceni", "Index", "Review", new { id = trainer.id }, new { @class = "btn btn-default" })</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="reviews" class="function">
+        <h3>Ocene</h3>
+        @foreach (var r in ratings)
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@r.training_name - @r.center_name</h3>
+                </div>
+                <div class="panel-body">
+                    <p>Ocena: @r.review / 5</p>
+                    <p>Komentar: @r.comment</p>
+                    <p>
+                        Status: @if (r.display == 0)
+                        {<span>Neobobren</span> }
+                        else
+                        { <span>Odobren</span>}
+                    </p>
+                </div>
+                <div class="panel-footer" style="display:flex;width:100%; justify-content:flex-end;">
+                    @if (Session["uid"] != null)
+                    {
+                        <form action="Review/Delete/@r.id" method="POST">
+                            <button type="submit" class="btn btn-danger">Ukloni</button>
+                        </form>
+                        <p style="margin: 0 1rem;"></p>
+                        <a href="Review/Edit/@r.id" class=" btn btn-warning">Izmeni</a>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+<script>
+    function setActive(id) {
+        $(".function").removeClass("active")
+        $("#" + id + ".function").addClass("active")
+        $(event.target).removeClass("btn-default")
+        $(".btn").removeClass("btn-primary")
+        $(".btn").addClass("btn-default")
+        $(event.target).addClass(".btn-primary")
+    }
+</script>

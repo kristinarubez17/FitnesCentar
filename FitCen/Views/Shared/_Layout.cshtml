@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("FitCen", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Pocetna", "Index", "Home")</li>
+
+                    @if (Session["uid"] != null)
+                    {
+                        <li>@Html.ActionLink(Session["username"] + " - Odjava", "Logout", "User")</li>
+                        <li><a href="/User/Edit/@Convert.ToInt32(Session["uid"])">Profil</a></li>
+
+                        <li><a href="/User">Kontrolna tabla</a></li>
+
+                        if (Convert.ToInt32(Session["rid"]) == 1)
+                        {
+
+                        }
+                        else if (Convert.ToInt32(Session["rid"]) == 2)
+                        {
+
+                        }
+                        else if (Convert.ToInt32(Session["rid"]) == 3)
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Prijava", "Login", "User")</li>
+                        <li>@Html.ActionLink("Registracija", "Create", "User")</li>
+
+
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+
+        @if (TempData["success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <span>@TempData["success"]</span>
+            </div>
+        }
+        @if (TempData["error"] != null)
+        {
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <span>@TempData["error"]</span>
+
+            </div>
+        }
+
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

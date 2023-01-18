@@ -1,0 +1,132 @@
+﻿@{
+    ViewBag.Title = "Pocetna";
+    var search = (ViewBag.search != null) ? ViewBag.search : "";
+    var year_upper = (ViewBag.year_upper != 0) ? ViewBag.year_upper : 0;
+    var year_lower = (ViewBag.year_lower != 0) ? ViewBag.year_lower : 0;
+
+}
+@using FitCen.Models;
+@model FitnessCenter
+@{
+    var centers = ViewBag.centers;
+}
+
+<div class="container-fluid" style="margin-top:1rem;">
+    <form action="/Home/Search" method="GET">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <input type="text" name="search" class="form-control" placeholder="Naziv centra, adresa" aria-label="Pretraga" aria-describedby="basic-addon2" value="@search">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @if (year_upper != 0)
+                    {
+                        <input type="number" name="year_upper" class="form-control" placeholder="Gornja granica godine otvaranja" aria-label="Pretraga" aria-describedby="basic-addon2" value="@year_upper" />
+                    }
+                    else
+                    {
+                        <input type="number" name="year_upper" class="form-control" placeholder="Gornja granica godine otvaranja" aria-label="Pretraga" aria-describedby="basic-addon2" />
+
+                    }
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @if (year_lower != 0)
+                    {
+                        <input type="number" name="year_lower" class="form-control" placeholder="Donja granica godine otvaranja" aria-label="Pretraga" aria-describedby="basic-addon2" value="@year_lower">
+                    }
+                    else
+                    {
+                        <input type="number" name="year_lower" class="form-control" placeholder="Donja granica godine otvaranja" aria-label="Pretraga" aria-describedby="basic-addon2">
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1rem;">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <select name="sorting" class="form-control">
+                        <option value="Sortiranje" disabled>Sortiranje</option>
+                        @if (ViewBag.sorting == "name")
+                        {
+                            <option value="name" selected>Naziv</option>
+                        }
+                        else
+                        {
+                            <option value="name">Naziv</option>
+                        }
+                        @if (ViewBag.sorting == "address")
+                        {
+                            <option value="address" selected>Adresa</option>
+                        }
+                        else
+                        {
+                            <option value="address">Adresa</option>
+                        }
+                        @if (ViewBag.sorting == "year")
+                        {
+                            <option value="year" selected>Godina otvaranja</option>
+                        }
+                        else
+                        {
+                            <option value="year">Godina otvaranja</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <select name="sorting_order" class="form-control">
+                    <option value="Poredak" disabled>Poredak</option>
+                    @if (ViewBag.sorting_order == "ascending")
+                    {
+                        <option value="ascending" selected>Rastuce</option>
+                    }
+                    else
+                    {
+                        <option value="ascending">Rastuce</option>
+                    }
+                    @if (ViewBag.sorting_order == "descending")
+                    {
+                        <option value="descending" selected>Opadajuce</option>
+                    }
+                    else
+                    {
+                        <option value="descending">Opadajuce</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="" style="margin-top:1rem;">
+            <button class="btn btn-outline-secondary" type="submit">Pretraži</button>
+        </div>
+    </form>
+</div>
+
+<div class="container-fluid" style="margin-top:1rem;">
+    <h1>Fitnes centri</h1>
+    <table class="table">
+        <thead>
+        <th>Naziv</th>
+        <th>Adresa</th>
+        <th>Godina otvaranja</th>
+        <th>Detalji</th>
+
+        </thead>
+        <tbody>
+            @foreach (var c in centers)
+            {
+                <tr>
+                    <td>@c.name</td>
+                    <td>@c.address</td>
+                    <td>@c.year_opened</td>
+                    <td><a href="FitnesCenter/Details/@c.id" class="btn btn-default">Detalji</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+

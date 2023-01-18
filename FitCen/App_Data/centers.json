@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "name": "FitCen",
+    "address": "Jovana Sremica 21 Novi Sad 2000",
+    "year_opened": 2019,
+    "owner_id": 1,
+    "month_price": 2000,
+    "year_price": 20000,
+    "group_price": 3000,
+    "group_price_with_trainer": 5000
+  },
+  {
+    "id": 2,
+    "name": "FitInn",
+    "address": "Stefana Jovanovica 25A Novi Sad 2500",
+    "year_opened": 2010,
+    "owner_id": 1,
+    "month_price": 3000,
+    "year_price": 30000,
+    "group_price": 4000,
+    "group_price_with_trainer": 7000
+  },
+  {
+    "id": 3,
+    "name": "FitCen Slavija",
+    "address": "Kralja Petrovica Velikog 12A Novi Sad 2500",
+    "year_opened": 2000,
+    "owner_id": 1,
+    "month_price": 3000,
+    "year_price": 30000,
+    "group_price": 4000,
+    "group_price_with_trainer": 7000
+  }
+]

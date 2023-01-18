@@ -1,0 +1,251 @@
+﻿
+@{
+    ViewBag.Title = "Pocetna";
+}
+@model dynamic
+@{
+    var upcoming_trainings = ViewBag.upcoming_trainings;
+    var past_trainings = ViewBag.past_trainings;
+    var search = (ViewBag.search != null) ? ViewBag.search : "";
+    var time_upper = ViewBag.time_upper;
+    var time_lower = ViewBag.time_lower;
+    var type = ViewBag.type;
+}
+<h2>Pocetna</h2>
+
+<div class="container-fluid">
+    <div class="function-nav">
+        <a class="btn btn-primary" role="button" onclick="setActive('trainings')">Treninzi</a>
+        <a class="btn btn-default" role="button" onclick="setActive('past_trainings')">Protekli treninzi</a>
+    </div>
+    <div id="trainings" class=" function active">
+        <div class="row">
+            <div class=" col-md-8">
+                <form action="Training/Create" method="post">
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Naziv</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="inputEmail3" placeholder="Naziv" name="name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Tip treninga</label>
+                        <div class="col-sm-12">
+                            <select type="text" class="form-control" id="inputEmail3" placeholder="Naziv" name="training_type">
+                                <option value="yoga">Yoga</option>
+                                <option value="Les mills tone">Les mills tone</option>
+                                <option value="Body pump">Body pump</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Trajanje</label>
+                        <div class="col-sm-12">
+                            <input type="number" class="form-control" id="inputEmail3" placeholder="Trajanje" name="duration">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Pocetak</label>
+                        <div class="col-sm-12">
+                            <input type="datetime-local" class="form-control" id="inputEmail3" name="start">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Maksimalno posetilaca</label>
+                        <div class="col-sm-12">
+                            <input type="number" class="form-control" id="inputEmail3" name="max_people">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-default">Kreiraj trening</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="col-md-4">
+                <form action="/User/Search" method="GET">
+                    <div class="form-group">
+                        <label>Tekst</label>
+                        <input type="text" name="search" class="form-control" placeholder="Naziv treninga" aria-label="Pretraga" aria-describedby="basic-addon2" value="@search">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="type" class="form-control" placeholder="Tip treninga" aria-label="Pretraga" aria-describedby="basic-addon2" value="@type">
+                    </div>
+                    <div class="form-group">
+                        @if (time_upper != DateTime.MaxValue)
+                        {
+                            <input type="datetime-local" name="time_upper" class="form-control" placeholder="Gornja granica godine otvaranja" aria-label="Pretraga" aria-describedby="basic-addon2" value="@time_upper" />
+                        }
+                        else
+                        {
+                            <input type="datetime-local" name="time_upper" class="form-control" placeholder="Gornja granica godine otvaranja" aria-label="Pretraga" aria-describedby="basic-addon2" />
+                        }
+                    </div>
+                    <div class="form-group">
+                        @if (time_lower != DateTime.MinValue)
+                        {
+                            <input type="datetime-local" name="time_lower" class="form-control" placeholder="Donja granica godine otvaranja" aria-label="Pretraga" aria-describedby="basic-addon2" value="@time_lower">
+                        }
+                        else
+                        {
+                            <input type="datetime-local" name="time_lower" class="form-control" placeholder="Donja granica godine otvaranja" aria-label="Pretraga" aria-describedby="basic-addon2">
+                        }
+                    </div>
+                    <div class="form-group">
+                        <select name="sorting" class="form-control">
+                            <option value="Sortiranje" disabled>Sortiranje</option>
+                            @if (ViewBag.sorting == "name")
+                            {
+                                <option value="name" selected>Naziv</option>
+                            }
+                            else
+                            {
+                                <option value="name">Naziv</option>
+                            }
+                            @if (ViewBag.sorting == "address")
+                            {
+                                <option value="address" selected>Adresa</option>
+                            }
+                            else
+                            {
+                                <option value="address">Adresa</option>
+                            }
+                            @if (ViewBag.sorting == "year")
+                            {
+                                <option value="year" selected>Godina otvaranja</option>
+                            }
+                            else
+                            {
+                                <option value="year">Godina otvaranja</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select name="sorting_order" class="form-control">
+                            <option value="Poredak" disabled>Poredak</option>
+                            @if (ViewBag.sorting_order == "ascending")
+                            {
+                                <option value="ascending" selected>Rastuce</option>
+                            }
+                            else
+                            {
+                                <option value="ascending">Rastuce</option>
+                            }
+                            @if (ViewBag.sorting_order == "descending")
+                            {
+                                <option value="descending" selected>Opadajuce</option>
+                            }
+                            else
+                            {
+                                <option value="descending">Opadajuce</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-primary active">
+                            <input type="radio" name="multiparam" id="option1" checked value="1"> Ili pretraga
+                        </label>
+                        <label class="btn btn-primary">
+                            <input type="radio" name="multiparam" id="option2" value="2"> I pretraga
+                        </label>
+
+                    </div>
+                    <div class="" style="margin-top:1rem;">
+                        <button class="btn btn-outline-secondary" type="submit">Pretraži</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <h3>Predstojeci treninzi</h3>
+        <table class="table">
+            <thead>
+            <th>ID</th>
+            <th>Naziv</th>
+            <th>Tip treninga</th>
+            <th>Trajanje</th>
+            <th>Pocetak</th>
+            <th>Maksimalno posetilaca</th>
+            <th>Slobodna mesta</th>
+            <th>Posetioci</th>
+            <th>Izmeni</th>
+            <th>Ukloni</th>
+            </thead>
+            <tbody>
+                @foreach (var trainer in upcoming_trainings)
+                {
+                    <tr>
+                        <td>@trainer.id</td>
+                        <td>@trainer.name</td>
+                        <td>@trainer.training_type</td>
+                        <td>@trainer.duration</td>
+                        <td>@trainer.start</td>
+                        <td>@trainer.max_people</td>
+                        <td>@trainer.free_places</td>
+                        <td><a href="/Training/Trainings/@trainer.id" class="btn btn-default" })>Posetioci</a></td>
+                        <td><a href="/Training/Edit/@trainer.id" class="btn btn-warning" })>Izmeni</a></td>
+                        <td>
+                            <form action="Training/Delete" method="POST">
+                                <input type="hidden" name="training_id" value="@trainer.id" />
+                                <button type="submit" class="btn btn-danger">Ukloni</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="past_trainings" class=" function">
+        <h3>Protekli treninzi</h3>
+        <table class="table">
+            <thead>
+            <th>ID</th>
+            <th>Naziv</th>
+            <th>Tip treninga</th>
+            <th>Trajanje</th>
+            <th>Pocetak</th>
+            <th>Maksimalno posetilaca</th>
+            <th>Slobodna mesta</th>
+            <th>Posetioci</th>
+            <th>Izmeni</th>
+            <th>Ukloni</th>
+            </thead>
+            <tbody>
+                @foreach (var trainer in past_trainings)
+                {
+                    <tr>
+                        <td>@trainer.id</td>
+                        <td>@trainer.name</td>
+                        <td>@trainer.training_type</td>
+                        <td>@trainer.duration</td>
+                        <td>@trainer.start.ToShortDateString()</td>
+                        <td>@trainer.max_people</td>
+                        <td>@trainer.free_places</td>
+                        <td><a href="/Training/Trainings/@trainer.id" class="btn btn-default" })>Posetioci</a></td>
+                        <td><a href="/Training/Edit/@trainer.id" class="btn btn-warning" })>Izmeni</a></td>
+                        <td>
+                            <form action="Training/Delete" method="POST">
+                                <input type="hidden" name="training_id" value="@trainer.id" />
+                                <button type="submit" class="btn btn-danger">Ukloni</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    function setActive(id) {
+        $(".function").removeClass("active")
+        $("#" + id + ".function").addClass("active")
+        $(event.target).removeClass("btn-default")
+        $(".btn").removeClass("btn-primary")
+        $(".btn").addClass("btn-default")
+        $(event.target).addClass(".btn-primary")
+    }
+</script>

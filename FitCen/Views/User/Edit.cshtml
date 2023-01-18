@@ -1,0 +1,77 @@
+﻿@model FitCen.Models.User
+
+@{
+    ViewBag.Title = "Profil";
+    var usr = ViewBag.user;
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Korisnik</h4>
+        <hr />
+        @Html.HiddenFor(model => model.id)
+
+        <div class="form-group">
+            <label class = "col-sm-2 control-label">Korisničko ime</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control", @Value = usr.username } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class = "col-sm-2 control-label">Email</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control", @Value = usr.email } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class = "col-sm-2 control-label">Lozinka</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", @Value = usr.password, @type = "password" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class = "col-sm-2 control-label">Ime</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.firstname, new { htmlAttributes = new { @class = "form-control", @Value = usr.firstname } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class = "col-sm-2 control-label">Prezime</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.lastname, new { htmlAttributes = new { @class = "form-control", @Value = usr.lastname } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class=" control-label col-md-2">Pol</label>
+            <div class="col-md-10">
+                <select name="gender" class=" form-control">
+                    <option value="1">Muski</option>
+                    <option value="2">Zenski</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class=" control-label col-md-2">Datum rođenja</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.birthday, new { htmlAttributes = new { @class = "form-control", @type = "date", @Value = usr.birthday.ToString("yyyy-MM-dd") } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+

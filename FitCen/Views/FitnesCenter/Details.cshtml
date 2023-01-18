@@ -1,0 +1,143 @@
+﻿@model FitCen.Models.FitnessCenter
+
+@{
+    ViewBag.Title = "Details";
+    var trainings = ViewBag.trainings;
+    var reviews = ViewBag.ratings;
+}
+
+<h2>Detalji fitnes centra</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.year_opened)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.year_opened)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.owner_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.owner_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.month_price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.month_price).00rsd
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.year_price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.year_price).00rsd
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.group_price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.group_price).00rsd
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.group_price_with_trainer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.group_price_with_trainer).00rsd
+        </dd>
+
+    </dl>
+</div>
+<div class="container">
+    <h4>Dolazeci treninzi</h4>
+    <table class="table">
+        <thead>
+        <th>Ime</th>
+        <th>Tip treninga</th>
+        <th>Trajanje</th>
+        <th>Pocetak</th>
+        <th>Maksimalan kapacitet</th>
+        <th>Slobodnih mesta</th>
+        <th>Zakazi</th>
+        </thead>
+        <tbody>
+            @foreach (var training in trainings)
+            {
+                <tr>
+                    @{
+                        var res = training.max_people - training.booked;
+                    }
+                    <td>@training.name</td>
+                    <td>@training.training_type</td>
+                    <td>@training.duration</td>
+                    <td>@training.start</td>
+                    <td>@training.max_people</td>
+                    <td>@res</td>
+                    <td>
+                        @if (res > 0)
+                        {
+                            <form action="/Appointment/Create" method="POST">
+                                <input name="training_id" value="@training.id" type="hidden" />
+                                <button class=" btn btn-default" type="submit">Zakazi</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <button class=" btn btn-default" disabled>Nema slobodnih mesta</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="container">
+    <h4>Ostavljene ocene</h4>
+    @foreach (var r in reviews)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">@r.training_name - @r.center_name</h3>
+            </div>
+            <div class="panel-body">
+                <p>Ocena: @r.review / 5</p>
+                <p>Komentar: @r.comment</p>
+                <p>
+                    Status: @if (r.display == 0)
+                    {<span>Neobobren</span> }
+                    else
+                    { <span>Odobren</span>}
+                </p>
+            </div>
+        </div>
+    }
+</div>
